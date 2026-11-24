@@ -1,15 +1,14 @@
 // ====================================================================
 // KONFIGURASI SUPABASE / DATABASE CLOUD
-// Anda dapat memasukkan URL dan anon-key Supabase di bawah ini
-// ATAU langsung mengaturnya lewat tombol "Database" di pojok kanan atas aplikasi.
+// Terhubung ke project Supabase Timeline PBNU
 // ====================================================================
 
 window.SUPABASE_CONFIG = {
-  // Masukkan Supabase Project URL, contoh: "https://xyzcompany.supabase.co"
-  url: "",
+  // Supabase Project URL
+  url: "https://cxhyvklzcowhmxkullqq.supabase.co",
   
-  // Masukkan Supabase Anon / Public API Key
-  anonKey: "",
+  // Supabase Publishable / Anon Key
+  anonKey: "sb_publishable_IsSx4mYrJVlwIZngEWP5EQ_a08WfKGK",
   
   // Nama tabel default
   tableName: "pbnu_timeline_tasks"

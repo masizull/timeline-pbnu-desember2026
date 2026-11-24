@@ -239,7 +239,7 @@
             </button>
           </div>
           <p class="text-[11px] text-slate-500 mb-2">Jalankan di <em>Supabase → SQL Editor</em> sekali saja sebelum menghubungkan:</p>
-          <pre class="bg-slate-900 text-slate-100 text-[10px] p-3 rounded-lg overflow-x-auto max-h-36 font-mono leading-relaxed" id="sqlCodeBlock">CREATE TABLE IF NOT EXISTS pbnu_timeline_tasks (
+          <pre class="bg-slate-900 text-slate-100 text-[10px] p-3 rounded-lg overflow-x-auto max-h-48 font-mono leading-relaxed" id="sqlCodeBlock">CREATE TABLE IF NOT EXISTS public.pbnu_timeline_tasks (
   id TEXT PRIMARY KEY,
   track TEXT NOT NULL,
   title TEXT NOT NULL,
@@ -247,15 +247,17 @@
   pic TEXT,
   start INT NOT NULL CHECK (start >= 1 AND start <= 31),
   end_day INT NOT NULL CHECK (end_day >= 1 AND end_day <= 31),
-  status TEXT NOT NULL DEFAULT 'Belum',
+  status TEXT NOT NULL DEFAULT 'Belum' CHECK (status IN ('Belum', 'Proses', 'Selesai')),
   note TEXT,
   is_layoff_gate BOOLEAN DEFAULT FALSE,
   order_idx INT DEFAULT 0,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-ALTER PUBLICATION supabase_realtime ADD TABLE pbnu_timeline_tasks;
-ALTER TABLE pbnu_timeline_tasks ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Public full access" ON pbnu_timeline_tasks FOR ALL USING (true) WITH CHECK (true);</pre>
+GRANT ALL ON TABLE public.pbnu_timeline_tasks TO anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.pbnu_timeline_tasks;
+ALTER TABLE public.pbnu_timeline_tasks ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow public all" ON public.pbnu_timeline_tasks FOR ALL USING (true) WITH CHECK (true);</pre>
         </div>
       </div>
     </div>
@@ -586,7 +588,11 @@ CREATE POLICY "Public full access" ON pbnu_timeline_tasks FOR ALL USING (true) W
             console.warn('Gagal koneksi Supabase:', err);
             dbMode = 'local';
             updateDbStatusBadge('local', 'Gagal Koneksi DB (Mode Lokal)');
-            if (!silent) showToast('Gagal terhubung ke database: ' + err.message);
+            let msg = 'Gagal terhubung ke database: ' + (err.message || err);
+            if (err.code === '42501' || (err.message && err.message.includes('permission denied'))) {
+              msg = 'Akses ditolak (42501). Jalankan skrip GRANT SQL di Supabase SQL Editor!';
+            }
+            if (!silent) showToast(msg);
           }
         }
 
