@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timeline Desember 2026 — Non-Aktif Layanan Media Komunikasi PBNU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <!-- Supabase JS Client for Real-time Collaborative Database -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .gantt-scroll::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+    }
+    .gantt-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .gantt-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .gantt-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .day-cell {
+      min-width: 30px;
+      width: 30px;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff !important; padding: 0 !important; }
+      .gantt-scroll { overflow: visible !important; }
+      .day-cell { min-width: 22px; width: 22px; }
+      @page { size: landscape; margin: 8mm; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 py-5">
+    <!-- Top Header -->
+    <header class="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-sm">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+              Desember 2026 · 21 Hari Kerja
+            </span>
+            <span id="complianceBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+              Memuat...
+            </span>
+            <!-- Live Database Connection Indicator -->
+            <button id="btnDbStatus" type="button" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-100 transition-colors cursor-pointer" title="Klik untuk mengonfigurasi Database Kolaborasi">
+              <span id="dbStatusDot" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+              <span id="dbStatusText">Mode Lokal (Klik Hubungkan DB)</span>
+            </button>
+          </div>
+          <h1 id="boardTitle" contenteditable="true" spellcheck="false" title="Klik untuk mengedit judul"
+              class="mt-2 text-lg sm:text-xl font-bold text-slate-900 outline-none rounded px-1 -ml-1 focus:ring-2 focus:ring-emerald-500/40 focus:bg-emerald-50/40">
+            Timeline Non-Aktif Layanan Media Komunikasi PBNU
+          </h1>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center gap-2 no-print">
+          <button id="btnDbConfig" type="button"
+                  class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition-colors cursor-pointer">
+            <i data-lucide="database" class="w-4 h-4 text-indigo-600"></i>
+            Database Kolaborasi
+          </button>
+          <button id="btnAddTask" type="button"
+                  class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800 transition-colors cursor-pointer">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Tambah Tugas
+          </button>
+          <button id="btnExportCsv" type="button"
+                  class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 transition-colors cursor-pointer">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            Export CSV
+          </button>
+          <button id="btnPrint" type="button"
+                  class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 transition-colors cursor-pointer">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            Cetak / PDF
+          </button>
+          <button id="btnReset" type="button"
+                  class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition-colors cursor-pointer">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter & Progress Bar Row -->
+      <div class="mt-4 pt-3.5 border-t border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div id="filterContainer" class="flex flex-wrap items-center gap-1.5 no-print">
+          <!-- Filter pills rendered by JS -->
+        </div>
+
+        <div class="flex items-center gap-3 min-w-[200px]">
+          <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div id="progressBar" class="h-full bg-emerald-600 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <span id="progressText" class="text-xs font-semibold text-slate-600 whitespace-nowrap">0/12 Selesai</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Legend & Quick Hint -->
+    <div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 px-1">
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-600"></span>SK &amp; Tim Transisi</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-sky-600"></span>Legal &amp; Perkum</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-amber-600"></span>SDM &amp; Layoff</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-violet-600"></span>BAST &amp; Exit</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-rose-100 border border-rose-300"></span>Libur/Cuti (24–25 Des)</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-slate-200"></span>Akhir Pekan</span>
+      </div>
+      <div class="text-slate-500 no-print">
+        Klik nama/ikon pensil untuk edit · Klik tanggal di kalender untuk geser durasi · Klik status untuk ubah progres
+      </div>
+    </div>
+
+    <!-- Main Interactive Gantt Table -->
+    <section class="mt-3 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+      <div class="gantt-scroll overflow-x-auto">
+        <table class="w-full border-collapse text-left">
+          <thead id="ganttHead">
+            <!-- Rendered by JS -->
+          </thead>
+          <tbody id="ganttBody" class="divide-y divide-slate-100">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Compact Footer References -->
+    <footer class="mt-3 px-1 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+      <div>
+        Acuan: <a href="https://peraturan.bpk.go.id/Details/161904/pp-no-35-tahun-2021" target="_blank" rel="noopener noreferrer" class="underline hover:text-slate-800">PP 35/2021 (Layoff ≥14 HK)</a> ·
+        <a href="https://storage.dewanpers.or.id/jdih-prod/documents/lampiran/2019peraturan003.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-slate-800">Peraturan Dewan Pers 03/2019</a> ·
+        <a href="https://peraturan.nu.id/04-komisi-organisasi/perkum-07-perangkat-perkumpulan/" target="_blank" rel="noopener noreferrer" class="underline hover:text-slate-800">Perkum NU</a> ·
+        <a href="https://indonesiabaik.id/infografis/kalender-libur-2026-siap-siap-healing" target="_blank" rel="noopener noreferrer" class="underline hover:text-slate-800">SKB 3 Menteri 2026 (24–25 Des)</a>
+      </div>
+      <div id="saveStatus" class="text-slate-400">Tersimpan otomatis di browser</div>
+    </footer>
+  </div>
+
+  <!-- Database Configuration & Cloud Sync Modal -->
+  <div id="dbModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 p-4 no-print" role="dialog" aria-modal="true" aria-labelledby="dbModalTitle">
+    <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-slate-50/70">
+        <div class="flex items-center gap-2">
+          <div class="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg">
+            <i data-lucide="database" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h2 id="dbModalTitle" class="text-base font-bold text-slate-900 leading-tight">Database Kolaborasi Real-time</h2>
+            <p class="text-xs text-slate-500">Sinkronkan timeline antar anggota tim secara langsung</p>
+          </div>
+        </div>
+        <button id="btnCloseDbModal" type="button" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 cursor-pointer" aria-label="Tutup">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4 overflow-y-auto">
+        <div class="p-3 bg-indigo-50/80 border border-indigo-200 rounded-lg text-xs text-indigo-900 leading-relaxed">
+          <p class="font-semibold mb-1 flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-600"></i>
+            Cara Kerja Sinkronisasi Bersama:
+          </p>
+          Aplikasi ini mendukung database cloud <strong>Supabase (PostgreSQL Real-time)</strong>. Setelah dihubungkan, setiap kali Anda atau anggota tim memperbarui status, tanggal, atau tugas, layar seluruh tim akan <strong>otomatis terupdate secara langsung</strong> tanpa perlu refresh!
+        </div>
+
+        <form id="dbForm" class="space-y-3.5">
+          <div>
+            <label for="dbSupabaseUrl" class="block text-xs font-semibold text-slate-700 mb-1">
+              Supabase Project URL
+            </label>
+            <input id="dbSupabaseUrl" type="url"
+                   class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-600 font-mono"
+                   placeholder="https://xyzabcdefg.supabase.co">
+            <span class="text-[11px] text-slate-400 mt-0.5 block">Dapat dilihat di menu: Project Settings → API</span>
+          </div>
+
+          <div>
+            <label for="dbSupabaseKey" class="block text-xs font-semibold text-slate-700 mb-1">
+              Supabase Anon / Public Key
+            </label>
+            <input id="dbSupabaseKey" type="password"
+                   class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-600 font-mono"
+                   placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+            <span class="text-[11px] text-slate-400 mt-0.5 block">Gunakan public anon key (bukan service role key)</span>
+          </div>
+
+          <div>
+            <label for="dbTableName" class="block text-xs font-semibold text-slate-700 mb-1">
+              Nama Tabel
+            </label>
+            <input id="dbTableName" type="text" value="pbnu_timeline_tasks"
+                   class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-600 font-mono">
+          </div>
+
+          <div class="pt-2 flex flex-wrap items-center gap-2">
+            <button id="btnConnectDb" type="submit"
+                    class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors cursor-pointer shadow-sm">
+              <i data-lucide="plug" class="w-3.5 h-3.5"></i>
+              Hubungkan &amp; Sinkronkan
+            </button>
+            <button id="btnDisconnectDb" type="button"
+                    class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer">
+              Gunakan Mode Lokal
+            </button>
+            <button id="btnSeedDb" type="button"
+                    class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-300 hover:bg-emerald-100 transition-colors cursor-pointer ml-auto">
+              <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
+              Upload 12 Tugas ke DB
+            </button>
+          </div>
+        </form>
+
+        <div class="border-t border-slate-100 pt-3">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-semibold text-slate-700">Skrip Pembuatan Tabel Database (SQL):</span>
+            <button id="btnCopySql" type="button" class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">
+              <i data-lucide="copy" class="w-3 h-3"></i>
+              Salin SQL
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-500 mb-2">Jalankan di <em>Supabase → SQL Editor</em> sekali saja sebelum menghubungkan:</p>
+          <pre class="bg-slate-900 text-slate-100 text-[10px] p-3 rounded-lg overflow-x-auto max-h-36 font-mono leading-relaxed" id="sqlCodeBlock">CREATE TABLE IF NOT EXISTS pbnu_timeline_tasks (
+  id TEXT PRIMARY KEY,
+  track TEXT NOT NULL,
+  title TEXT NOT NULL,
+  result TEXT,
+  pic TEXT,
+  start INT NOT NULL CHECK (start >= 1 AND start <= 31),
+  end_day INT NOT NULL CHECK (end_day >= 1 AND end_day <= 31),
+  status TEXT NOT NULL DEFAULT 'Belum',
+  note TEXT,
+  is_layoff_gate BOOLEAN DEFAULT FALSE,
+  order_idx INT DEFAULT 0,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+ALTER PUBLICATION supabase_realtime ADD TABLE pbnu_timeline_tasks;
+ALTER TABLE pbnu_timeline_tasks ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public full access" ON pbnu_timeline_tasks FOR ALL USING (true) WITH CHECK (true);</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add / Edit Task Modal -->
+  <div id="taskModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 p-4 no-print" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="bg-white rounded-xl shadow-xl border border-slate-200 w-full max-w-md overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-100">
+        <h2 id="modalTitle" class="text-base font-bold text-slate-900">Edit Tugas</h2>
+        <button id="btnCloseModal" type="button" class="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer" aria-label="Tutup">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <form id="taskForm" class="p-5 space-y-3.5">
+        <input type="hidden" id="fieldId">
+        <div>
+          <label for="fieldTitle" class="block text-xs font-semibold text-slate-700 mb-1">Nama Tugas / Deliverable</label>
+          <input id="fieldTitle" type="text" required
+                 class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-600"
+                 placeholder="Contoh: Draft SK Non-Aktif Layanan">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="fieldTrack" class="block text-xs font-semibold text-slate-700 mb-1">Jalur Kerja</label>
+            <select id="fieldTrack"
+                    class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-600">
+              <option value="SK & Tim Transisi">SK &amp; Tim Transisi</option>
+              <option value="Legal & Perkum">Legal &amp; Perkum</option>
+              <option value="SDM & Layoff">SDM &amp; Layoff</option>
+              <option value="BAST & Exit">BAST &amp; Exit</option>
+            </select>
+          </div>
+          <div>
+            <label for="fieldStatus" class="block text-xs font-semibold text-slate-700 mb-1">Status</label>
+            <select id="fieldStatus"
+                    class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-600">
+              <option value="Belum">Belum</option>
+              <option value="Proses">Proses</option>
+              <option value="Selesai">Selesai</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="fieldResult" class="block text-xs font-semibold text-slate-700 mb-1">Hasil / Output Tugas</label>
+            <input id="fieldResult" type="text" required
+                   class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-600"
+                   placeholder="Contoh: SK, Legal Opini, BAST">
+          </div>
+          <div>
+            <label for="fieldPic" class="block text-xs font-semibold text-slate-700 mb-1">PIC / Penanggung Jawab</label>
+            <input id="fieldPic" type="text" required
+                   class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-600"
+                   placeholder="Contoh: Tim Transisi & HR">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="fieldStart" class="block text-xs font-semibold text-slate-700 mb-1">Mulai (Des 2026)</label>
+            <input id="fieldStart" type="number" min="1" max="31" required
+                   class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-600">
+          </div>
+          <div>
+            <label for="fieldEnd" class="block text-xs font-semibold text-slate-700 mb-1">Selesai (Des 2026)</label>
+            <input id="fieldEnd" type="number" min="1" max="31" required
+                   class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-600">
+          </div>
+        </div>
+        <div>
+          <label for="fieldNote" class="block text-xs font-semibold text-slate-700 mb-1">Catatan Singkat (Opsional)</label>
+          <input id="fieldNote" type="text"
+                 class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-600"
+                 placeholder="Target dokumen atau catatan penting">
+        </div>
+        <div class="pt-2 flex items-center justify-between gap-2">
+          <button id="btnDeleteTask" type="button"
+                  class="hidden px-3 py-2 rounded-lg text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 transition-colors cursor-pointer">
+            Hapus
+          </button>
+          <div class="flex items-center gap-2 ml-auto">
+            <button id="btnCancelModal" type="button"
+                    class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer">
+              Batal
+            </button>
+            <button type="submit"
+                    class="px-4 py-2 rounded-lg text-xs font-semibold text-white bg-emerald-700 hover:bg-emerald-800 transition-colors cursor-pointer">
+              Simpan
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reset Confirmation Modal -->
+  <div id="resetModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 p-4 no-print" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
+    <div class="bg-white rounded-xl shadow-xl border border-slate-200 w-full max-w-sm p-5">
+      <h2 id="resetModalTitle" class="text-base font-bold text-slate-900">Reset Timeline ke Awal?</h2>
+      <p class="mt-1.5 text-sm text-slate-600">Semua perubahan judul, tanggal, dan status akan dikembalikan ke jadwal default Desember 2026.</p>
+      <div class="mt-4 flex items-center justify-end gap-2">
+        <button id="btnCancelReset" type="button"
+                class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 cursor-pointer">
+          Batal
+        </button>
+        <button id="btnConfirmReset" type="button"
+                class="px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 cursor-pointer">
+          Ya, Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-4 right-4 z-50 hidden px-4 py-2.5 rounded-lg bg-slate-900 text-white text-xs font-medium shadow-lg no-print flex items-center gap-2">
+    <span id="toastIcon"></span>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = 'pbnu_media_timeline_des2026_v1';
+      const DB_CONFIG_KEY = 'pbnu_media_timeline_db_config';
+
+      // December 2026 calendar constants (Dec 1, 2026 = Tuesday)
+      const DAY_NAMES = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+      const HOLIDAYS = {
+        24: 'Cuti Bersama Natal',
+        25: 'Hari Raya Natal'
+      };
+
+      const TRACK_STYLES = {
+        'SK & Tim Transisi': { bar: 'bg-emerald-600', dot: 'bg-emerald-600', light: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
+        'Legal & Perkum': { bar: 'bg-sky-600', dot: 'bg-sky-600', light: 'bg-sky-50 text-sky-800 border-sky-200' },
+        'SDM & Layoff': { bar: 'bg-amber-600', dot: 'bg-amber-600', light: 'bg-amber-50 text-amber-800 border-amber-200' },
+        'BAST & Exit': { bar: 'bg-violet-600', dot: 'bg-violet-600', light: 'bg-violet-50 text-violet-800 border-violet-200' }
+      };
+
+      const STATUS_CYCLE = ['Belum', 'Proses', 'Selesai'];
+      const STATUS_STYLES = {
+        'Belum': 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200',
+        'Proses': 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100',
+        'Selesai': 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
+      };
+
+      const DEFAULT_TITLE = 'Timeline Non-Aktif Layanan Media Komunikasi PBNU';
+      const DEFAULT_TASKS = [
+        { id: 't1', track: 'SK & Tim Transisi', title: 'Draft SK Non-Aktif & Ajuan Ketua PBNU', result: 'Draft SK', pic: 'Sekretariat PBNU', start: 1, end: 3, status: 'Belum', note: 'Sesuai Perkum 16 Pedoman Administrasi' },
+        { id: 't2', track: 'SK & Tim Transisi', title: 'Pengesahan SK & SK Turunan Tim Transisi', result: 'SK & SK Tim Transisi', pic: 'Ketua & Wasekjen', start: 4, end: 7, status: 'Belum', note: 'Mandat resmi Ketua & Wasekjen membidangi' },
+        { id: 't3', track: 'Legal & Perkum', title: 'Mapping Legal Kepemilikan PT. Visi Berkah Bangsa', result: 'Dokumen Mapping Legal', pic: 'Tim Legal', start: 1, end: 4, status: 'Belum', note: 'Audit akta, RUPS, pemegang saham & KBLI' },
+        { id: 't4', track: 'Legal & Perkum', title: 'Validasi Uji Sertifikasi Dewan Pers', result: 'BA Validasi Dewan Pers', pic: 'Tim Legal', start: 4, end: 8, status: 'Belum', note: 'Cek verifikasi admin/faktual & risiko dorman 6 bln' },
+        { id: 't5', track: 'Legal & Perkum', title: 'Legal Opini Perkum / Jam\'iyyah NU', result: 'Legal Opini', pic: 'Tim Legal', start: 7, end: 14, status: 'Belum', note: 'Kajian Perkum 7, 8, & 19 terkait status PT' },
+        { id: 't6', track: 'SDM & Layoff', title: 'Mapping SDM & Hitung Hak (UU Cipta Kerja)', result: 'Matriks SDM & Pesangon', pic: 'HR & Keuangan', start: 2, end: 7, status: 'Belum', note: 'Klasifikasi PKWTT/PKWT & simulasi pesangon' },
+        { id: 't7', track: 'SDM & Layoff', title: 'Terbit Surat Layoff SDM (Min. 14 HK)', result: 'Surat Layoff (PHK)', pic: 'Tim Transisi & HR', start: 8, end: 9, status: 'Belum', note: 'Batas akhir 9 Des agar efektif 31 Des = 14 HK', isLayoffGate: true },
+        { id: 't8', track: 'SDM & Layoff', title: 'Masa Tanggapan 7 HK & Bipartit SDM', result: 'BA Bipartit', pic: 'HR & Tim Transisi', start: 10, end: 18, status: 'Belum', note: 'Jendela keberatan tertulis PP 35/2021' },
+        { id: 't9', track: 'BAST & Exit', title: 'BAST Digital (Email, Medsos, Web, Server, Domain)', result: 'BAST Aset Digital', pic: 'IT & Admin Digital', start: 9, end: 23, status: 'Belum', note: 'Backup penuh, rotasi password/2FA & BAST' },
+        { id: 't10', track: 'BAST & Exit', title: 'Dokumen & BAST Laporan Keuangan', result: 'BAST Lap. Keuangan', pic: 'Keuangan', start: 14, end: 29, status: 'Belum', note: 'Cut-off kas, utang/piutang, pajak & payroll' },
+        { id: 't11', track: 'BAST & Exit', title: 'Stock Opname & BAST Inventaris / Peralatan', result: 'BAST Inventaris', pic: 'GA & Aset', start: 14, end: 29, status: 'Belum', note: 'Pengembalian laptop, kamera & alat produksi' },
+        { id: 't12', track: 'SDM & Layoff', title: 'Pencairan Hak SDM, Lapor Disnaker & Tutup Final', result: 'PB & Tanda Lapor Disnaker', pic: 'Tim Transisi', start: 28, end: 31, status: 'Belum', note: 'Perjanjian Bersama, transfer hak & lapor final' }
+      ];
+
+      let state = {
+        title: DEFAULT_TITLE,
+        tasks: JSON.parse(JSON.stringify(DEFAULT_TASKS)),
+        activeFilter: 'Semua'
+      };
+
+      // Database sync state
+      let dbClient = null;
+      let dbRealtimeChannel = null;
+      let dbMode = 'local'; // 'local' | 'supabase' | 'backend'
+      let isSyncingRemote = false;
+
+      function isWeekend(day) {
+        const dow = new Date(2026, 11, day).getDay();
+        return dow === 0 || dow === 6;
+      }
+
+      function isHoliday(day) {
+        return Boolean(HOLIDAYS[day]);
+      }
+
+      function isWorkday(day) {
+        return !isWeekend(day) && !isHoliday(day);
+      }
+
+      function countWorkdaysAfter(fromDay, toDay) {
+        let count = 0;
+        for (let d = fromDay + 1; d <= toDay; d++) {
+          if (isWorkday(d)) count++;
+        }
+        return count;
+      }
+
+      function countWorkdaysInclusive(startDay, endDay) {
+        let count = 0;
+        for (let d = startDay; d <= endDay; d++) {
+          if (isWorkday(d)) count++;
+        }
+        return count;
+      }
+
+      // ==========================================
+      // DATABASE INTEGRATION & REAL-TIME COLLAB
+      // ==========================================
+
+      function getSavedDbConfig() {
+        try {
+          const raw = localStorage.getItem(DB_CONFIG_KEY);
+          if (raw) return JSON.parse(raw);
+        } catch (e) {}
+        if (window.SUPABASE_CONFIG && window.SUPABASE_CONFIG.url && window.SUPABASE_CONFIG.anonKey) {
+          return window.SUPABASE_CONFIG;
+        }
+        return { url: '', anonKey: '', tableName: 'pbnu_timeline_tasks' };
+      }
+
+      function saveDbConfig(cfg) {
+        try {
+          localStorage.setItem(DB_CONFIG_KEY, JSON.stringify(cfg));
+        } catch (e) {}
+      }
+
+      function updateDbStatusBadge(mode, msg) {
+        const btn = document.getElementById('btnDbStatus');
+        const dot = document.getElementById('dbStatusDot');
+        const txt = document.getElementById('dbStatusText');
+        if (!btn || !dot || !txt) return;
+
+        if (mode === 'supabase' || mode === 'backend') {
+          btn.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 transition-colors cursor-pointer';
+          dot.className = 'w-2 h-2 rounded-full bg-emerald-600';
+          txt.textContent = msg || '🟢 DB Terhubung (Real-time)';
+        } else if (mode === 'syncing') {
+          btn.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-800 border border-indigo-300 transition-colors cursor-pointer';
+          dot.className = 'w-2 h-2 rounded-full bg-indigo-600 animate-spin';
+          txt.textContent = '🔄 Menyinkronkan...';
+        } else {
+          btn.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-100 transition-colors cursor-pointer';
+          dot.className = 'w-2 h-2 rounded-full bg-amber-500 animate-pulse';
+          txt.textContent = msg || 'Mode Lokal (Klik Sambung DB)';
+        }
+      }
+
+      // Convert DB row to local task object
+      function rowToTask(row) {
+        return {
+          id: String(row.id),
+          track: row.track,
+          title: row.title,
+          result: row.result || '-',
+          pic: row.pic || 'Tim Transisi',
+          start: parseInt(row.start, 10),
+          end: parseInt(row.end_day || row.end, 10),
+          status: row.status || 'Belum',
+          note: row.note || '',
+          isLayoffGate: Boolean(row.is_layoff_gate)
+        };
+      }
+
+      // Convert local task object to DB row
+      function taskToRow(task, idx) {
+        return {
+          id: String(task.id),
+          track: task.track,
+          title: task.title,
+          result: task.result || '-',
+          pic: task.pic || 'Tim Transisi',
+          start: task.start,
+          end_day: task.end,
+          status: task.status || 'Belum',
+          note: task.note || '',
+          is_layoff_gate: Boolean(task.isLayoffGate),
+          order_idx: idx !== undefined ? idx : 0,
+          updated_at: new Date().toISOString()
+        };
+      }
+
+      async function initDatabase(silent = false) {
+        const cfg = getSavedDbConfig();
+
+        // 1. Try Supabase if configured
+        if (cfg.url && cfg.anonKey && window.supabase) {
+          try {
+            updateDbStatusBadge('syncing');
+            dbClient = window.supabase.createClient(cfg.url, cfg.anonKey);
+            const tableName = cfg.tableName || 'pbnu_timeline_tasks';
+
+            // Test query
+            const { data, error } = await dbClient
+              .from(tableName)
+              .select('*')
+              .order('order_idx', { ascending: true });
+
+            if (error) throw error;
+
+            dbMode = 'supabase';
+            updateDbStatusBadge('supabase', '🟢 Cloud DB Aktif (Real-time)');
+
+            if (data && data.length > 0) {
+              isSyncingRemote = true;
+              state.tasks = data.map(rowToTask);
+              renderAll();
+              isSyncingRemote = false;
+              if (!silent) showToast('Terhubung ke Supabase! Data sinkron.');
+            } else {
+              // Empty database table -> offer to seed
+              if (!silent) showToast('Tabel database kosong. Klik tombol Upload 12 Tugas.');
+            }
+
+            // Setup Real-time listener
+            if (dbRealtimeChannel) {
+              dbClient.removeChannel(dbRealtimeChannel);
+            }
+            dbRealtimeChannel = dbClient
+              .channel('pbnu_timeline_live')
+              .on('postgres_changes', { event: '*', schema: 'public', table: tableName }, (payload) => {
+                handleRemoteChange(payload);
+              })
+              .subscribe((status) => {
+                if (status === 'SUBSCRIBED') {
+                  updateDbStatusBadge('supabase', '🟢 Real-time Aktif');
+                }
+              });
+
+            return true;
+          } catch (err) {
+            console.warn('Gagal koneksi Supabase:', err);
+            dbMode = 'local';
+            updateDbStatusBadge('local', 'Gagal Koneksi DB (Mode Lokal)');
+            if (!silent) showToast('Gagal terhubung ke database: ' + err.message);
+          }
+        }
+
+        // 2. Try Local Node.js Backend API if available on same origin
+        try {
+          const res = await fetch('/api/tasks', { method: 'GET', headers: { 'Accept': 'application/json' } });
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              dbMode = 'backend';
+              isSyncingRemote = true;
+              state.tasks = data.map(rowToTask);
+              renderAll();
+              isSyncingRemote = false;
+              updateDbStatusBadge('backend', '🟢 Server API Terhubung');
+              if (!silent) showToast('Terhubung ke Server API lokal!');
+              return true;
+            }
+          }
+        } catch (e) {
+          // No local backend running
+        }
+
+        // 3. Fallback to localStorage
+        dbMode = 'local';
+        updateDbStatusBadge('local', 'Mode Lokal (Klik Sambung DB)');
+        return false;
+      }
+
+      function handleRemoteChange(payload) {
+        if (isSyncingRemote) return;
+        const { eventType, new: newRow, old: oldRow } = payload;
+        isSyncingRemote = true;
+
+        if (eventType === 'INSERT') {
+          const task = rowToTask(newRow);
+          const idx = state.tasks.findIndex(t => t.id === task.id);
+          if (idx === -1) {
+            state.tasks.push(task);
+            showToast(`🔔 Anggota tim menambahkan tugas: "${task.title}"`);
+          } else {
+            state.tasks[idx] = task;
+          }
+        } else if (eventType === 'UPDATE') {
+          const task = rowToTask(newRow);
+          const idx = state.tasks.findIndex(t => t.id === task.id);
+          if (idx !== -1) {
+            state.tasks[idx] = task;
+            showToast(`🔔 Tugas diperbarui oleh tim: "${task.title}"`);
+          } else {
+            state.tasks.push(task);
+          }
+        } else if (eventType === 'DELETE') {
+          const oldId = oldRow ? String(oldRow.id) : null;
+          if (oldId) {
+            state.tasks = state.tasks.filter(t => t.id !== oldId);
+            showToast('🔔 Satu tugas dihapus oleh anggota tim');
+          }
+        }
+
+        saveLocalState();
+        renderAll();
+        isSyncingRemote = false;
+      }
+
+      async function syncTaskToDatabase(task, action = 'upsert') {
+        if (dbMode === 'supabase' && dbClient) {
+          const cfg = getSavedDbConfig();
+          const tableName = cfg.tableName || 'pbnu_timeline_tasks';
+          try {
+            if (action === 'delete') {
+              await dbClient.from(tableName).delete().eq('id', task.id);
+            } else {
+              const row = taskToRow(task, state.tasks.findIndex(t => t.id === task.id));
+              await dbClient.from(tableName).upsert(row);
+            }
+            const statusEl = document.getElementById('saveStatus');
+            if (statusEl) statusEl.textContent = 'Tersimpan ke Cloud Database';
+          } catch (err) {
+            console.error('Error sync ke Supabase:', err);
+            const statusEl = document.getElementById('saveStatus');
+            if (statusEl) statusEl.textContent = 'Gagal sinkron cloud (tersimpan lokal)';
+          }
+        } else if (dbMode === 'backend') {
+          try {
+            if (action === 'delete') {
+              await fetch(`/api/tasks/${task.id}`, { method: 'DELETE' });
+            } else {
+              await fetch(`/api/tasks/${task.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(taskToRow(task))
+              });
+            }
+          } catch (e) {}
+        }
+      }
+
+      async function seedDefaultTasksToDb() {
+        if (dbMode !== 'supabase' || !dbClient) {
+          showToast('Harap hubungkan database Supabase terlebih dahulu.');
+          return;
+        }
+        const cfg = getSavedDbConfig();
+        const tableName = cfg.tableName || 'pbnu_timeline_tasks';
+        try {
+          updateDbStatusBadge('syncing');
+          const rows = state.tasks.map((t, i) => taskToRow(t, i));
+          const { error } = await dbClient.from(tableName).upsert(rows);
+          if (error) throw error;
+          updateDbStatusBadge('supabase', '🟢 Cloud DB Aktif (Real-time)');
+          showToast(`Berhasil upload ${rows.length} tugas ke database!`);
+        } catch (err) {
+          showToast('Gagal upload ke database: ' + err.message);
+          updateDbStatusBadge('supabase');
+        }
+      }
+
+      function loadLocalState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && Array.isArray(parsed.tasks) && parsed.tasks.length > 0) {
+              state.title = parsed.title || DEFAULT_TITLE;
+              state.tasks = parsed.tasks.map(t => {
+                if (!t.result) {
+                  const def = DEFAULT_TASKS.find(d => d.id === t.id);
+                  t.result = def ? def.result : '-';
+                }
+                return t;
+              });
+            }
+          }
+        } catch (e) {}
+      }
+
+      function saveLocalState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            title: state.title,
+            tasks: state.tasks
+          }));
+          const statusEl = document.getElementById('saveStatus');
+          if (statusEl) {
+            statusEl.textContent = dbMode === 'supabase' ? 'Tersimpan otomatis (Cloud DB & Lokal)' : 'Tersimpan otomatis di browser';
+          }
+        } catch (e) {}
+      }
+
+      function saveState(modifiedTask, action = 'upsert') {
+        saveLocalState();
+        if (modifiedTask) {
+          syncTaskToDatabase(modifiedTask, action);
+        }
+      }
+
+      let toastTimer = null;
+      function showToast(msg) {
+        const el = document.getElementById('toast');
+        const txt = document.getElementById('toastMsg');
+        if (!el || !txt) return;
+        txt.textContent = msg;
+        el.classList.remove('hidden');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          el.classList.add('hidden');
+        }, 2800);
+      }
+
+      function updateCompliance() {
+        const badge = document.getElementById('complianceBadge');
+        if (!badge) return;
+        const layoffTask = state.tasks.find(t => t.isLayoffGate) || state.tasks.find(t => /layoff|phk/i.test(t.title));
+        if (!layoffTask) {
+          badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200';
+          badge.textContent = 'Info: Tambah jadwal Surat Layoff untuk cek 14 HK';
+          return;
+        }
+        const remainingWorkdays = countWorkdaysAfter(layoffTask.end, 31);
+        if (remainingWorkdays >= 14) {
+          badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200';
+          badge.textContent = `✓ Layoff ${layoffTask.end} Des → ${remainingWorkdays} HK ke 31 Des (Aman PP 35/2021)`;
+        } else {
+          badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-300';
+          badge.textContent = `⚠ Layoff ${layoffTask.end} Des → Hanya ${remainingWorkdays} HK ke 31 Des (Kurang dari 14 HK!)`;
+        }
+      }
+
+      function updateProgress() {
+        const total = state.tasks.length;
+        const done = state.tasks.filter(t => t.status === 'Selesai').length;
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+        const bar = document.getElementById('progressBar');
+        const txt = document.getElementById('progressText');
+        if (bar) bar.style.width = pct + '%';
+        if (txt) txt.textContent = `${done}/${total} Selesai (${pct}%)`;
+      }
+
+      function renderFilters() {
+        const container = document.getElementById('filterContainer');
+        if (!container) return;
+        const tracks = ['Semua', 'SK & Tim Transisi', 'Legal & Perkum', 'SDM & Layoff', 'BAST & Exit'];
+        container.innerHTML = '';
+        tracks.forEach(track => {
+          const count = track === 'Semua' ? state.tasks.length : state.tasks.filter(t => t.track === track).length;
+          const active = state.activeFilter === track;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = active
+            ? 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-white transition-colors cursor-pointer'
+            : 'px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer';
+          btn.textContent = `${track} (${count})`;
+          btn.addEventListener('click', () => {
+            state.activeFilter = track;
+            renderAll();
+          });
+          container.appendChild(btn);
+        });
+      }
+
+      function renderTableHead() {
+        const thead = document.getElementById('ganttHead');
+        if (!thead) return;
+        let dayHeaders = '';
+        for (let d = 1; d <= 31; d++) {
+          const dow = new Date(2026, 11, d).getDay();
+          const dayShort = DAY_NAMES[dow];
+          const weekend = isWeekend(d);
+          const holiday = isHoliday(d);
+          const isGate = d === 9;
+          let bg = 'bg-slate-50 text-slate-600';
+          if (holiday) bg = 'bg-rose-50 text-rose-700';
+          else if (weekend) bg = 'bg-slate-100 text-slate-400';
+          else if (isGate) bg = 'bg-amber-50 text-amber-800';
+
+          const borderGate = isGate ? 'border-r-2 border-r-amber-500' : 'border-r border-slate-200/70';
+          const titleAttr = holiday ? `title="${HOLIDAYS[d]}"` : (isGate ? 'title="Batas akhir terbit Surat Layoff (14 HK ke 31 Des)"' : '');
+
+          dayHeaders += `
+            <th ${titleAttr} class="day-cell px-0.5 py-2 text-center border-b border-slate-200 ${borderGate} ${bg}">
+              <div class="text-[10px] font-medium leading-none opacity-80">${dayShort}</div>
+              <div class="text-xs font-bold mt-1 leading-none">${d}</div>
+            </th>`;
+        }
+
+        thead.innerHTML = `
+          <tr>
+            <th class="sticky left-0 z-20 bg-slate-50 border-b border-r border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 min-w-[270px] sm:min-w-[320px]">
+              Tugas / Deliverable &amp; PIC
+            </th>
+            <th class="bg-slate-50 border-b border-r border-slate-200 px-2.5 py-2 text-xs font-semibold text-slate-700 text-center whitespace-nowrap">
+              Tanggal
+            </th>
+            <th class="bg-slate-50 border-b border-r border-slate-200 px-2.5 py-2 text-xs font-semibold text-slate-700 text-left whitespace-nowrap min-w-[140px]">
+              Hasil
+            </th>
+            <th class="bg-slate-50 border-b border-r border-slate-200 px-2.5 py-2 text-xs font-semibold text-slate-700 text-center whitespace-nowrap">
+              Status
+            </th>
+            ${dayHeaders}
+          </tr>`;
+      }
+
+      function renderTableBody() {
+        const tbody = document.getElementById('ganttBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        const filtered = state.activeFilter === 'Semua'
+          ? state.tasks
+          : state.tasks.filter(t => t.track === state.activeFilter);
+
+        if (filtered.length === 0) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td colspan="35" class="px-4 py-8 text-center text-sm text-slate-400">Belum ada tugas pada jalur ini. Klik "Tambah Tugas" untuk membuat baru.</td>`;
+          tbody.appendChild(tr);
+          return;
+        }
+
+        filtered.forEach(task => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50/70 transition-colors group';
+          const style = TRACK_STYLES[task.track] || TRACK_STYLES['SK & Tim Transisi'];
+          const statusCls = STATUS_STYLES[task.status] || STATUS_STYLES['Belum'];
+          const hkCount = countWorkdaysInclusive(task.start, task.end);
+
+          // Task info sticky cell
+          const tdInfo = document.createElement('td');
+          tdInfo.className = 'sticky left-0 z-10 bg-white group-hover:bg-slate-50 border-r border-slate-200 px-3 py-2 align-middle';
+          tdInfo.innerHTML = `
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0 flex-1 cursor-pointer task-edit-trigger" title="${task.note ? task.note.replace(/"/g, '&quot;') : 'Klik untuk edit'}">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full shrink-0 ${style.dot}"></span>
+                  <span class="text-xs sm:text-[13px] font-semibold text-slate-900 leading-snug ${task.status === 'Selesai' ? 'line-through text-slate-400' : ''}">${escapeHtml(task.title)}</span>
+                </div>
+                <div class="mt-0.5 pl-3.5 flex items-center gap-2 text-[11px] text-slate-500">
+                  <span>${escapeHtml(task.pic)}</span>
+                  ${task.note ? `<span class="hidden sm:inline text-slate-400 truncate max-w-[160px]">· ${escapeHtml(task.note)}</span>` : ''}
+                </div>
+              </div>
+              <button type="button" class="task-edit-btn no-print opacity-60 group-hover:opacity-100 p-1 rounded hover:bg-slate-200/70 text-slate-500 cursor-pointer shrink-0" title="Edit tugas">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>`;
+          tdInfo.querySelector('.task-edit-trigger').addEventListener('click', () => openModal(task.id));
+          tdInfo.querySelector('.task-edit-btn').addEventListener('click', () => openModal(task.id));
+          tr.appendChild(tdInfo);
+
+          // Date range cell
+          const tdDate = document.createElement('td');
+          tdDate.className = 'border-r border-slate-200 px-2 py-2 text-center align-middle whitespace-nowrap cursor-pointer hover:bg-slate-100';
+          tdDate.title = 'Klik untuk ubah tanggal';
+          tdDate.innerHTML = `
+            <div class="text-xs font-semibold text-slate-800">${task.start === task.end ? task.start : task.start + '–' + task.end} Des</div>
+            <div class="text-[10px] text-slate-400">${hkCount} HK</div>`;
+          tdDate.addEventListener('click', () => openModal(task.id));
+          tr.appendChild(tdDate);
+
+          // Result (Hasil) inline-editable cell
+          const tdResult = document.createElement('td');
+          tdResult.className = 'border-r border-slate-200 px-2.5 py-2 align-middle min-w-[140px] max-w-[180px]';
+          const resultEl = document.createElement('div');
+          resultEl.contentEditable = 'true';
+          resultEl.spellcheck = false;
+          resultEl.title = 'Klik untuk langsung edit hasil tugas';
+          resultEl.className = 'text-xs font-medium text-slate-700 bg-slate-50/80 border border-slate-200/80 rounded-md px-2 py-1 outline-none focus:ring-2 focus:ring-emerald-500/40 focus:bg-white focus:border-emerald-500 leading-snug';
+          resultEl.textContent = task.result || '-';
+          resultEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              resultEl.blur();
+            }
+          });
+          resultEl.addEventListener('blur', () => {
+            const val = resultEl.textContent.trim() || '-';
+            if (val !== task.result) {
+              task.result = val;
+              resultEl.textContent = val;
+              saveState(task, 'upsert');
+              showToast('Hasil tugas diperbarui');
+            }
+          });
+          tdResult.appendChild(resultEl);
+          tr.appendChild(tdResult);
+
+          // Status cycle cell
+          const tdStatus = document.createElement('td');
+          tdStatus.className = 'border-r border-slate-200 px-2 py-2 text-center align-middle whitespace-nowrap';
+          const statusBtn = document.createElement('button');
+          statusBtn.type = 'button';
+          statusBtn.className = `px-2 py-0.5 rounded-full text-[11px] font-semibold border transition-colors cursor-pointer ${statusCls}`;
+          statusBtn.textContent = task.status;
+          statusBtn.title = 'Klik untuk ganti status';
+          statusBtn.addEventListener('click', () => {
+            const idx = STATUS_CYCLE.indexOf(task.status);
+            task.status = STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length];
+            saveState(task, 'upsert');
+            renderAll();
+          });
+          tdStatus.appendChild(statusBtn);
+          tr.appendChild(tdStatus);
+
+          // 31 day cells
+          for (let d = 1; d <= 31; d++) {
+            const td = document.createElement('td');
+            const weekend = isWeekend(d);
+            const holiday = isHoliday(d);
+            const isGate = d === 9;
+            const inRange = d >= task.start && d <= task.end;
+            const isStart = d === task.start;
+            const isEnd = d === task.end;
+
+            let cellBg = '';
+            if (holiday) cellBg = 'bg-rose-50/70';
+            else if (weekend) cellBg = 'bg-slate-100/70';
+
+            const borderGate = isGate ? 'border-r-2 border-r-amber-400/90' : 'border-r border-slate-100';
+            td.className = `day-cell p-0 align-middle relative cursor-pointer hover:bg-emerald-50/60 ${cellBg} ${borderGate}`;
+            td.title = `${d} Des 2026 — Klik untuk atur rentang "${task.title}"`;
+
+            if (inRange) {
+              const bar = document.createElement('div');
+              const roundL = isStart ? 'rounded-l-md ml-0.5' : '';
+              const roundR = isEnd ? 'rounded-r-md mr-0.5' : '';
+              const dim = (weekend || holiday) ? 'opacity-35' : (task.status === 'Selesai' ? 'opacity-50' : 'opacity-95');
+              bar.className = `h-5 ${style.bar} ${roundL} ${roundR} ${dim} transition-all`;
+              td.appendChild(bar);
+            }
+
+            td.addEventListener('click', () => {
+              if (d < task.start) {
+                task.start = d;
+              } else if (d > task.end) {
+                task.end = d;
+              } else if (d === task.start && d === task.end) {
+                openModal(task.id);
+                return;
+              } else if (d === task.start) {
+                task.start = Math.min(task.end, d + 1);
+              } else {
+                task.end = d;
+              }
+              saveState(task, 'upsert');
+              renderAll();
+              showToast(`Jadwal diperbarui: ${task.start}–${task.end} Des`);
+            });
+
+            tr.appendChild(td);
+          }
+
+          tbody.appendChild(tr);
+        });
+
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      // Modal logic for Tasks
+      const taskModal = document.getElementById('taskModal');
+      const taskForm = document.getElementById('taskForm');
+      const btnDeleteTask = document.getElementById('btnDeleteTask');
+
+      function openModal(taskId) {
+        const isEdit = Boolean(taskId);
+        const task = isEdit ? state.tasks.find(t => t.id === taskId) : null;
+        document.getElementById('modalTitle').textContent = isEdit ? 'Edit Tugas' : 'Tambah Tugas Baru';
+        document.getElementById('fieldId').value = task ? task.id : '';
+        document.getElementById('fieldTitle').value = task ? task.title : '';
+        document.getElementById('fieldTrack').value = task ? task.track : 'SK & Tim Transisi';
+        document.getElementById('fieldStatus').value = task ? task.status : 'Belum';
+        document.getElementById('fieldResult').value = task ? (task.result || '') : '';
+        document.getElementById('fieldPic').value = task ? task.pic : 'Tim Transisi';
+        document.getElementById('fieldStart').value = task ? task.start : 1;
+        document.getElementById('fieldEnd').value = task ? task.end : 5;
+        document.getElementById('fieldNote').value = task ? (task.note || '') : '';
+
+        if (isEdit) {
+          btnDeleteTask.classList.remove('hidden');
+        } else {
+          btnDeleteTask.classList.add('hidden');
+        }
+
+        taskModal.classList.remove('hidden');
+        taskModal.classList.add('flex');
+        document.getElementById('fieldTitle').focus();
+      }
+
+      function closeModal() {
+        taskModal.classList.add('hidden');
+        taskModal.classList.remove('flex');
+      }
+
+      taskForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('fieldId').value;
+        const title = document.getElementById('fieldTitle').value.trim();
+        const track = document.getElementById('fieldTrack').value;
+        const status = document.getElementById('fieldStatus').value;
+        const result = document.getElementById('fieldResult').value.trim() || '-';
+        const pic = document.getElementById('fieldPic').value.trim() || 'Tim Transisi';
+        let start = Math.max(1, Math.min(31, parseInt(document.getElementById('fieldStart').value, 10) || 1));
+        let end = Math.max(1, Math.min(31, parseInt(document.getElementById('fieldEnd').value, 10) || start));
+        if (end < start) {
+          const tmp = start;
+          start = end;
+          end = tmp;
+        }
+        const note = document.getElementById('fieldNote').value.trim();
+
+        if (!title) return;
+
+        let modifiedTask = null;
+        if (id) {
+          const existing = state.tasks.find(t => t.id === id);
+          if (existing) {
+            existing.title = title;
+            existing.track = track;
+            existing.status = status;
+            existing.result = result;
+            existing.pic = pic;
+            existing.start = start;
+            existing.end = end;
+            existing.note = note;
+            modifiedTask = existing;
+          }
+          showToast('Tugas diperbarui');
+        } else {
+          modifiedTask = {
+            id: 't_' + Date.now(),
+            track,
+            title,
+            result,
+            pic,
+            start,
+            end,
+            status,
+            note
+          };
+          state.tasks.push(modifiedTask);
+          showToast('Tugas baru ditambahkan');
+        }
+
+        saveState(modifiedTask, 'upsert');
+        closeModal();
+        renderAll();
+      });
+
+      btnDeleteTask.addEventListener('click', () => {
+        const id = document.getElementById('fieldId').value;
+        if (!id) return;
+        const target = state.tasks.find(t => t.id === id);
+        state.tasks = state.tasks.filter(t => t.id !== id);
+        if (target) {
+          saveState(target, 'delete');
+        }
+        closeModal();
+        renderAll();
+        showToast('Tugas dihapus');
+      });
+
+      document.getElementById('btnCloseModal').addEventListener('click', closeModal);
+      document.getElementById('btnCancelModal').addEventListener('click', closeModal);
+      taskModal.addEventListener('click', (e) => {
+        if (e.target === taskModal) closeModal();
+      });
+
+      // Database Configuration Modal Logic
+      const dbModal = document.getElementById('dbModal');
+      const dbForm = document.getElementById('dbForm');
+      const btnDbConfig = document.getElementById('btnDbConfig');
+      const btnDbStatus = document.getElementById('btnDbStatus');
+      const btnCloseDbModal = document.getElementById('btnCloseDbModal');
+      const btnDisconnectDb = document.getElementById('btnDisconnectDb');
+      const btnSeedDb = document.getElementById('btnSeedDb');
+      const btnCopySql = document.getElementById('btnCopySql');
+
+      function openDbModal() {
+        const cfg = getSavedDbConfig();
+        document.getElementById('dbSupabaseUrl').value = cfg.url || '';
+        document.getElementById('dbSupabaseKey').value = cfg.anonKey || '';
+        document.getElementById('dbTableName').value = cfg.tableName || 'pbnu_timeline_tasks';
+        dbModal.classList.remove('hidden');
+        dbModal.classList.add('flex');
+        if (window.lucide) window.lucide.createIcons();
+      }
+
+      function closeDbModal() {
+        dbModal.classList.add('hidden');
+        dbModal.classList.remove('flex');
+      }
+
+      btnDbConfig.addEventListener('click', openDbModal);
+      btnDbStatus.addEventListener('click', openDbModal);
+      btnCloseDbModal.addEventListener('click', closeDbModal);
+      dbModal.addEventListener('click', (e) => {
+        if (e.target === dbModal) closeDbModal();
+      });
+
+      dbForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const url = document.getElementById('dbSupabaseUrl').value.trim();
+        const anonKey = document.getElementById('dbSupabaseKey').value.trim();
+        const tableName = document.getElementById('dbTableName').value.trim() || 'pbnu_timeline_tasks';
+
+        if (!url || !anonKey) {
+          showToast('Harap masukkan Supabase URL dan Anon Key.');
+          return;
+        }
+
+        saveDbConfig({ url, anonKey, tableName });
+        const success = await initDatabase(false);
+        if (success) {
+          closeDbModal();
+        }
+      });
+
+      btnDisconnectDb.addEventListener('click', () => {
+        saveDbConfig({ url: '', anonKey: '', tableName: 'pbnu_timeline_tasks' });
+        if (dbClient && dbRealtimeChannel) {
+          dbClient.removeChannel(dbRealtimeChannel);
+        }
+        dbClient = null;
+        dbMode = 'local';
+        updateDbStatusBadge('local');
+        closeDbModal();
+        showToast('Kembali ke mode penyimpanan lokal');
+      });
+
+      btnSeedDb.addEventListener('click', () => {
+        seedDefaultTasksToDb();
+      });
+
+      btnCopySql.addEventListener('click', () => {
+        const sql = document.getElementById('sqlCodeBlock').textContent;
+        navigator.clipboard.writeText(sql).then(() => {
+          showToast('Skrip SQL berhasil disalin ke clipboard!');
+        }).catch(() => {
+          showToast('Gagal menyalin SQL secara otomatis.');
+        });
+      });
+
+      // Reset modal logic
+      const resetModal = document.getElementById('resetModal');
+      document.getElementById('btnReset').addEventListener('click', () => {
+        resetModal.classList.remove('hidden');
+        resetModal.classList.add('flex');
+      });
+      document.getElementById('btnCancelReset').addEventListener('click', () => {
+        resetModal.classList.add('hidden');
+        resetModal.classList.remove('flex');
+      });
+      document.getElementById('btnConfirmReset').addEventListener('click', () => {
+        state.title = DEFAULT_TITLE;
+        state.tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS));
+        state.activeFilter = 'Semua';
+        document.getElementById('boardTitle').textContent = state.title;
+        saveLocalState();
+        if (dbMode === 'supabase' && dbClient) {
+          seedDefaultTasksToDb();
+        }
+        resetModal.classList.add('hidden');
+        resetModal.classList.remove('flex');
+        renderAll();
+        showToast('Timeline dikembalikan ke default');
+      });
+
+      // Top buttons
+      document.getElementById('btnAddTask').addEventListener('click', () => openModal(null));
+      document.getElementById('btnPrint').addEventListener('click', () => window.print());
+
+      document.getElementById('btnExportCsv').addEventListener('click', () => {
+        const headers = ['Jalur Kerja', 'Tugas / Deliverable', 'PIC', 'Mulai (Des 2026)', 'Selesai (Des 2026)', 'Hari Kerja', 'Hasil', 'Status', 'Catatan'];
+        const rows = state.tasks.map(t => [
+          t.track,
+          t.title,
+          t.pic,
+          `${t.start} Des 2026`,
+          `${t.end} Des 2026`,
+          countWorkdaysInclusive(t.start, t.end),
+          t.result || '-',
+          t.status,
+          t.note || ''
+        ]);
+        const csv = [headers, ...rows]
+          .map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+          .join('\n');
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'timeline-desember-2026-pbnu.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('CSV berhasil diunduh');
+      });
+
+      // Editable board title
+      const boardTitleEl = document.getElementById('boardTitle');
+      boardTitleEl.addEventListener('blur', () => {
+        const text = boardTitleEl.textContent.trim();
+        state.title = text || DEFAULT_TITLE;
+        boardTitleEl.textContent = state.title;
+        saveLocalState();
+      });
+
+      // Escape key closes modals
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeModal();
+          closeDbModal();
+          resetModal.classList.add('hidden');
+          resetModal.classList.remove('flex');
+        }
+      });
+
+      function renderAll() {
+        boardTitleEl.textContent = state.title;
+        updateCompliance();
+        updateProgress();
+        renderFilters();
+        renderTableHead();
+        renderTableBody();
+      }
+
+      // Initial execution
+      loadLocalState();
+      renderAll();
+      initDatabase(true);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "timeline-pbnu-desember2026",
+  "version": "1.0.0",
+  "description": "Timeline Interaktif & Kolaboratif Desember 2026 — Non-Aktif Layanan Media Komunikasi PBNU",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "timeline",
+    "gantt",
+    "pbnu",
+    "collaboration",
+    "supabase",
+    "realtime"
+  ],
+  "author": "Zulfikar",
+  "license": "MIT"
+}
